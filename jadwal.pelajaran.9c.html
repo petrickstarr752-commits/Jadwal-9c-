@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#315b28">
+<title>Minecraft Class 9C</title>
+
+<style>
+:root {
+    --green: #4c8c2b;
+    --green-dark: #315b28;
+    --dirt: #79502d;
+    --stone: #777;
+    --bg: #e9eee5;
+    --white: #fff;
+    --text: #242424;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+header {
+    background: var(--green);
+    color: white;
+    padding: 20px 15px;
+    text-align: center;
+    border-bottom: 7px solid var(--dirt);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 23px;
+}
+
+header p {
+    margin: 8px 0 0;
+    font-size: 13px;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 17px;
+    background: var(--stone);
+    border: 3px solid #444;
+    box-shadow: inset 3px 3px #aaa, inset -3px -3px #444;
+    color: #7fffff;
+    font-weight: 900;
+    font-size: 20px;
+}
+
+.container {
+    width: min(950px, 100%);
+    padding: 15px;
+    margin: auto;
+}
+
+.card {
+    background: var(--white);
+    padding: 17px;
+    margin-bottom: 16px;
+    border: 2px solid #b7b7b7;
+    border-bottom: 5px solid #888;
+    border-right: 5px solid #888;
+    border-radius: 3px;
+}
+
+h2 {
+    margin: 0 0 14px;
+    font-size: 17px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.box {
+    background: #f1f3ef;
+    padding: 13px;
+    border-left: 4px solid var(--green);
+    min-width: 0;
+}
+
+.box.active {
+    background: #e0f4d8;
+    border-left-color: #247a25;
+}
+
+.label {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.value {
+    font-size: 19px;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+}
+
+.sub {
+    font-size: 12px;
+    color: #666;
+    margin-top: 7px;
+    line-height: 1.5;
+}
+
+.day-buttons {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 3px 3px 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    cursor: pointer;
+    border: 2px solid #bbb;
+    border-bottom: 4px solid #777;
+    border-right: 4px solid #777;
+    background: #ddd;
+    padding: 10px 13px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+button.selected {
+    color: white;
+    background: var(--green);
+    border-color: #8fc96d;
+    border-bottom-color: var(--green-dark);
+    border-right-color: var(--green-dark);
+}
+
+button:active {
+    transform: translateY(2px);
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 570px;
+    border-collapse: collapse;
+    background: white;
+}
+
+th {
+    background: #555;
+    color: white;
+    padding: 11px 9px;
+    text-align: left;
+    font-size: 12px;
+}
+
+td {
+    padding: 11px 9px;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+tbody tr:nth-child(even) {
+    background: #f3f3f3;
+}
+
+tbody tr.current {
+    background: #e0f4d8;
+    box-shadow: inset 4px 0 #31852b;
+}
+
+.subject {
+    font-weight: bold;
+}
+
+.teacher {
+    color: #666;
+}
+
+.time {
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--green-dark);
+}
+
+.status {
+    display: inline-block;
+    background: #ddd;
+    padding: 5px 7px;
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.status.now {
+    color: white;
+    background: #39852d;
+}
+
+.status.next {
+    background: #cce8ff;
+    color: #17538a;
+}
+
+.hours {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.hour {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: center;
+    background: #f2f2f2;
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+.hour-name {
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.hour-time {
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--green-dark);
+    white-space: nowrap;
+}
+
+.note {
+    background: #fff3cd;
+    border-left: 4px solid #d5a52a;
+    padding: 11px;
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    background: var(--green-dark);
+    color: white;
+    border-top: 6px solid var(--dirt);
+    padding: 20px 10px;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+@media(max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 19px;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .hours {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 12px;
+    }
+
+    .value {
+        font-size: 18px;
+    }
+
+    .day-buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .day-buttons button {
+        padding: 10px 5px;
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>⛏ MINECRAFT CLASS</h1>
+    <p>Jadwal Pelajaran · Semester Ganjil 2026/2027</p>
+    <div class="badge">KELAS 9C</div>
+</header>
+
+<main class="container">
+
+    <section class="card">
+        <h2>📊 Status Hari Ini</h2>
+
+        <div class="dashboard">
+
+            <div class="box">
+                <div class="label">🕒 Waktu Sekarang</div>
+                <div class="value" id="clock">--:--:--</div>
+                <div class="sub" id="date">Memuat tanggal...</div>
+            </div>
+
+            <div class="box" id="lessonBox">
+                <div class="label">📚 Pelajaran Saat Ini</div>
+                <div class="value" id="currentSubject">Memuat...</div>
+                <div class="sub" id="currentTeacher"></div>
+            </div>
+
+            <div class="box">
+                <div class="label">⏳ Hitung Mundur</div>
+                <div class="value" id="countdown">--:--</div>
+                <div class="sub" id="nextInfo">Pergantian jam</div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>📅 Jadwal Pelajaran</h2>
+
+        <div class="day-buttons" id="dayButtons"></div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jam</th>
+                        <th>Waktu</th>
+                        <th>Pelajaran</th>
+                        <th>Guru</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody"></tbody>
+            </table>
+        </div>
+
+        <div class="note">
+            🟢 Warna hijau menunjukkan pelajaran yang sedang berlangsung.
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>⏰ Waktu Pembelajaran</h2>
+        <div class="hours" id="hoursGrid"></div>
+
+        <div class="note">
+            Senin dimulai dengan upacara bendera.
+            Selasa–Jumat dimulai dengan pembiasaan.
+            Istirahat/MBG pukul 09.30–09.45.
+            Istirahat kedua pukul 11.05–11.20.
+            Khusus Jumat jam ke-6 dan ke-7 adalah KomBer.
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    ⛏ MINECRAFT CLASS 9C<br>
+    Belajar dan bangun masa depanmu!
+</footer>
+
+<script>
+const days = [
+    "Senin", "Selasa", "Rabu",
+    "Kamis", "Jumat", "Sabtu"
+];
+
+const times = {
+    1: ["07:30", "08:10"],
+    2: ["08:10", "08:50"],
+    3: ["08:50", "09:30"],
+    4: ["09:45", "10:25"],
+    5: ["10:25", "11:05"],
+    6: ["11:20", "12:00"],
+    7: ["12:00", "12:40"]
+};
+
+const schedule = {
+    "Senin": [
+        [1, "B. Indonesia", "I Putu Purna, S.Pd., Gr."],
+        [2, "B. Indonesia", "I Putu Purna, S.Pd., Gr."],
+        [3, "IPA", "I Wayan Gemer, S.Pd.Fis., M.Pd."],
+        [4, "IPA", "I Wayan Gemer, S.Pd.Fis., M.Pd."],
+        [5, "IPS", "Desak Gede Padmayanti, SE"],
+        [6, "IPS", "Desak Gede Padmayanti, SE"]
+    ],
+
+    "Selasa": [
+        [1, "B. Inggris", "I Nyoman Wirta Astana, S.Pd."],
+        [2, "B. Inggris", "I Nyoman Wirta Astana, S.Pd."],
+        [3, "B. Inggris", "I Nyoman Wirta Astana, S.Pd."],
+        [4, "Seni", "Ni Komang Anggun Aulia, S.Pd."],
+        [5, "Seni", "Ni Komang Anggun Aulia, S.Pd."],
+        [6, "IPA", "I Wayan Gemer, S.Pd.Fis., M.Pd."],
+        [7, "IPA", "I Wayan Gemer, S.Pd.Fis., M.Pd."]
+    ],
+
+    "Rabu": [
+        [1, "B. Indonesia", "I Putu Purna, S.Pd., Gr."],
+        [2, "B. Indonesia", "I Putu Purna, S.Pd., Gr."],
+        [3, "B. Indonesia", "I Putu Purna, S.Pd., Gr."],
+        [4, "Agama", "Ni Made Carmiati, S.Ag."],
+        [5, "Agama", "Ni Made Carmiati, S.Ag."],
+        [6, "MTK", "I Ketut Widiastra, S.Pd., Gr."],
+        [7, "MTK", "I Ketut Widiastra, S.Pd., Gr."]
+    ],
+
+    "Kamis": [
+        [1, "B. Bali", "Ni Wayan Merthi, S.Pd., M.Pd."],
+        [2, "B. Bali", "Ni Wayan Merthi, S.Pd., M.Pd."],
+        [3, "IPS", "Desak Gede Padmayanti, SE"],
+        [4, "PJOK", "I Gede Lara Artayasa, S.Or."],
+        [5, "PJOK", "I Gede Lara Artayasa, S.Or."],
+        [6, "MTK", "I Ketut Widiastra, S.Pd., Gr."],
+        [7, "MTK", "I Ketut Widiastra, S.Pd., Gr."]
+    ],
+
+    "Jumat": [
+        [1, "Informatika", "I Gede Ida Selamet Satriya, S.Pd., Gr."],
+        [2, "Informatika", "I Gede Ida Selamet Satriya, S.Pd., Gr."],
+        [4, "Pancasila", "I Nyoman Weda, S.Pd."],
+        [5, "Pancasila", "I Nyoman Weda, S.Pd."],
+        [6, "KomBer", "Kegiatan KomBer"],
+        [7, "KomBer", "Kegiatan KomBer"]
+    ],
+
+    "Sabtu": []
+};
+
+const activities = [
+    ["0", "07:15", "07:30", "Pembiasaan / Upacara Bendera"],
+    ["1", "07:30", "08:10", "Belajar Mengajar"],
+    ["2", "08:10", "08:50", "Belajar Mengajar"],
+    ["3", "08:50", "09:30", "Belajar Mengajar"],
+    ["-", "09:30", "09:45", "Istirahat / MBG"],
+    ["4", "09:45", "10:25", "Belajar Mengajar"],
+    ["5", "10:25", "11:05", "Belajar Mengajar"],
+    ["-", "11:05", "11:20", "Istirahat"],
+    ["6", "11:20", "12:00", "Belajar Mengajar"],
+    ["7", "12:00", "12:40", "Belajar Mengajar"]
+];
+
+function toMinutes(time) {
+    const [h, m] = time.split(":").map(Number);
+    return h * 60 + m;
+}
+
+function getToday() {
+    return days[(new Date().getDay() + 6) % 7];
+}
+
+function renderSchedule(day) {
+    const body = document.getElementById("scheduleBody");
+    const now = new Date();
+    const current = now.getHours() * 60 + now.getMinutes();
+
+    body.innerHTML = "";
+
+    const lessons = schedule[day] || [];
+
+    if (lessons.length === 0) {
+        body.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align:center;padding:25px">
+                    🌳 Jadwal Sabtu belum tersedia pada foto.
+                </td>
+            </tr>`;
+        return;
+    }
+
+    lessons.forEach(([number, subject, teacher]) => {
+        const [start, end] = times[number];
+
+        const active =
+            day === getToday() &&
+            current >= toMinutes(start) &&
+            current < toMinutes(end);
+
+        const upcoming =
+            day === getToday() &&
+            current < toMinutes(start);
+
+        const status = active
+            ? '<span class="status now">● AKTIF</span>'
+            : upcoming
+                ? '<span class="status next">BERIKUTNYA</span>'
+                : '<span class="status">TERJADWAL</span>';
+
+        const row = document.createElement("tr");
+
+        if (active) row.classList.add("current");
+
+        row.innerHTML = `
+            <td><strong>${number}</strong></td>
+            <td class="time">${start} – ${end}</td>
+            <td class="subject">${subject}</td>
+            <td class="teacher">${teacher}</td>
+            <td>${status}</td>
+        `;
+
+        body.appendChild(row);
+    });
+}
+
+function selectDay(day) {
+    document.querySelectorAll(".day-buttons button").forEach(button => {
+        button.classList.toggle("selected", button.dataset.day === day);
+    });
+
+    renderSchedule(day);
+}
+
+function updateDashboard() {
+    const now = new Date();
+    const today = getToday();
+    const current = now.getHours() * 60 + now.getMinutes();
+    const secondsNow =
+        now.getHours() * 3600 +
+        now.getMinutes() * 60 +
+        now.getSeconds();
+
+    document.getElementById("clock").textContent =
+        now.toLocaleTimeString("id-ID");
+
+    document.getElementById("date").textContent =
+        now.toLocaleDateString("id-ID", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
+
+    const lesson = activities.find(item =>
+        current >= toMinutes(item[1]) &&
+        current < toMinutes(item[2])
+    );
+
+    let subject = "Di luar jam pelajaran";
+    let teacher = "Tidak ada pelajaran saat ini";
+
+    if (days.includes(today) && lesson) {
+        if (lesson[0] === "-") {
+            subject = lesson[3];
+            teacher = "Waktu istirahat";
+        } else if (lesson[0] === "0") {
+            subject = lesson[3];
+            teacher = "Kegiatan pagi";
+        } else {
+            const found = (schedule[today] || []).find(
+                item => String(item[0]) === lesson[0]
+            );
+
+            if (found) {
+                subject = found[1];
+                teacher = found[2];
+            } else {
+                subject = lesson[3];
+                teacher = "Guru tidak tercantum";
+            }
+        }
+    } else if (!days.includes(today)) {
+        subject = "Hari libur";
+        teacher = "Tidak ada jadwal sekolah";
+    }
+
+    document.getElementById("currentSubject").textContent = subject;
+    document.getElementById("currentTeacher").textContent = teacher;
+
+    document.getElementById("lessonBox").classList.toggle(
+        "active",
+        !!lesson && days.includes(today)
+    );
+
+    const next = activities.find(item =>
+        toMinutes(item[1]) > current
+    );
+
+    let target = null;
+    let info = "";
+
+    if (lesson) {
+        target = toMinutes(lesson[2]) * 60;
+        info = "Sisa waktu kegiatan";
+    } else if (next && days.includes(today)) {
+        target = toMinutes(next[1]) * 60;
+        info = "Menuju: " + next[3];
+    }
+
+    if (target !== null) {
+        const remaining = Math.max(0, target - secondsNow);
+        const mins = Math.floor(remaining / 60);
+        const secs = remaining % 60;
+
+        document.getElementById("countdown").textContent =
+            `${mins}:${String(secs).padStart(2, "0")}`;
+
+        document.getElementById("nextInfo").textContent = info;
+    } else {
+        document.getElementById("countdown").textContent = "--:--";
+        document.getElementById("nextInfo").textContent =
+            "Tidak ada pergantian jam lagi";
+    }
+
+    const selected = document.querySelector(
+        ".day-buttons button.selected"
+    );
+
+    renderSchedule(selected ? selected.dataset.day : today);
+}
+
+const dayButtons = document.getElementById("dayButtons");
+
+days.forEach(day => {
+    const button = document.createElement("button");
+    button.textContent = day;
+    button.dataset.day = day;
+    button.onclick = () => selectDay(day);
+
+    dayButtons.appendChild(button);
+});
+
+const hoursGrid = document.getElementById("hoursGrid");
+
+activities.forEach(item => {
+    const element = document.createElement("div");
+    element.className = "hour";
+
+    element.innerHTML = `
+        <div>
+            <div class="hour-name">${item[3]}</div>
+            <div class="sub">Jam ke-${item[0]}</div>
+        </div>
+        <div class="hour-time">${item[1]} – ${item[2]}</div>
+    `;
+
+    hoursGrid.appendChild(element);
+});
+
+selectDay(getToday());
+updateDashboard();
+setInterval(updateDashboard, 1000);
+</script>
+
+</body>
+</html>
